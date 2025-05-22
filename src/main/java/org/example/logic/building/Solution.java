@@ -1,6 +1,8 @@
 package org.example.logic.building;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class Solution {
@@ -40,7 +42,7 @@ public class Solution {
 
     public int[] unionArray(int[] nums1, int[] nums2) {
         int lastUniqueFoundAt1 = 0; // Pointer for the last unique element found
-        for(int i= 0; i < nums1.length; i++) {
+        for (int i = 0; i < nums1.length; i++) {
             if (nums1[i] != nums1[lastUniqueFoundAt1]) {
                 lastUniqueFoundAt1++;
                 nums1[lastUniqueFoundAt1] = nums1[i]; // Move unique element to the front
@@ -48,14 +50,14 @@ public class Solution {
 
         }
         int lastUniqueFoundAt2 = 0; // Pointer for the last unique element found
-        for(int i= 0; i < nums2.length; i++) {
+        for (int i = 0; i < nums2.length; i++) {
             if (nums2[i] != nums2[lastUniqueFoundAt2]) {
                 lastUniqueFoundAt2++;
                 nums2[lastUniqueFoundAt2] = nums2[i]; // Move unique element to the front
             }
         }
         List<Integer> result = new ArrayList<>();
-        int i= 0, j= 0, k= 0;
+        int i = 0, j = 0, k = 0;
         while (i <= lastUniqueFoundAt1 && j <= lastUniqueFoundAt2) {
             if (nums1[i] < nums2[j]) {
                 result.add(nums1[i]);
@@ -105,5 +107,122 @@ public class Solution {
         }
 
         return result.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    public ArrayList<Integer> leaders(int[] nums) {
+        ArrayList<Integer> leaders = new ArrayList<>();
+        int maxFromRight = nums[nums.length - 1];
+        leaders.add(maxFromRight); // The rightmost element is always a leader
+
+        for (int i = nums.length - 2; i >= 0; i--) {
+            if (nums[i] > maxFromRight) {
+                maxFromRight = nums[i];
+                leaders.add(maxFromRight);
+            }
+        }
+
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i = leaders.size() - 1; i >= 0; i--) {
+            result.add(leaders.get(i));
+        }
+        return result;
+    }
+
+    public int[] rearrangeArray(int[] nums) {
+        int n = nums.length;
+        int[] result = new int[n];
+        int posIndex = 0;
+        int negIndex = 1;
+
+        for (int i = 0; i < n; i++) {
+            if (nums[i] >= 0) {
+                result[posIndex] = nums[i];
+                posIndex += 2;
+            } else {
+                result[negIndex] = nums[i];
+                negIndex += 2;
+            }
+        }
+        return result;
+    }
+
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer, Integer> valuesWithIndex = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (valuesWithIndex.containsKey(target - nums[i])) {
+                return new int[]{i, valuesWithIndex.get(target - nums[i])};
+            }
+            valuesWithIndex.put(nums[i], i);
+        }
+        return new int[]{0, 0};
+    }
+
+    public List<List<Integer>> threeSumBrute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        HashSet<List<Integer>> uniqueTriplets = new HashSet<>();
+
+        for (int i = 0; i < nums.length - 2; i++) {
+            for (int j = i + 1; j < nums.length - 1; j++) {
+                for (int k = j + 1; k < nums.length; k++) {
+                    if (nums[i] + nums[j] + nums[k] == 0) {
+                        List<Integer> triplet = new ArrayList<>();
+                        triplet.add(nums[i]);
+                        triplet.add(nums[j]);
+                        triplet.add(nums[k]);
+                        triplet.sort(Integer::compareTo); // Sort to ensure uniqueness
+                        uniqueTriplets.add(triplet);
+                    }
+                }
+            }
+        }
+
+        result.addAll(uniqueTriplets);
+        return result;
+    }
+
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        HashSet<List<Integer>> uniqueTriplets = new HashSet<>();
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            HashSet<Integer> seen = new HashSet<>();
+            for (int j = i + 1; j < n; j++) {
+                int complement = -(nums[i] + nums[j]);
+                if (seen.contains(complement)) {
+                    List<Integer> triplet = new ArrayList<>();
+                    triplet.add(nums[i]);
+                    triplet.add(nums[j]);
+                    triplet.add(complement);
+                    triplet.sort(Integer::compareTo); // Sort to ensure uniqueness
+                    uniqueTriplets.add(triplet);
+                }
+                seen.add(nums[j]);
+            }
+        }
+        return new ArrayList<>(uniqueTriplets);
+    }
+
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        int n = nums.length;
+        HashSet<List<Integer>> result = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                HashSet<Integer> seen = new HashSet<>();
+                for (int k = j + 1; k < n; k++) {
+                    int complement = target - (nums[i] + nums[j] + nums[k]);
+                    if (seen.contains(complement)) {
+                        List<Integer> quadruplet = new ArrayList<>();
+                        quadruplet.add(nums[i]);
+                        quadruplet.add(nums[j]);
+                        quadruplet.add(nums[k]);
+                        quadruplet.add(complement);
+                        quadruplet.sort(Integer::compareTo); // Sort to ensure uniqueness
+                        result.add(quadruplet);
+                    }
+                    seen.add(nums[k]);
+                }
+            }
+        }
+        return new ArrayList<>(result);
     }
 }
