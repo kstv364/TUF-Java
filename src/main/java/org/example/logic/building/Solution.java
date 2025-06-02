@@ -1,9 +1,6 @@
 package org.example.logic.building;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class Solution {
     public void moveZeroes(int[] nums) {
@@ -224,5 +221,64 @@ public class Solution {
             }
         }
         return new ArrayList<>(result);
+    }
+
+    public void sortZeroOneTwo(int[] nums) {
+        HashMap<Integer, Integer> countMap = new HashMap<>();
+        for (int num : nums) {
+            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
+        }
+
+        int i = 0;
+        for (int num = 0; num <= 2; num++) {
+            int count = countMap.getOrDefault(num, 0);
+            for (int j = 0; j < count; j++) {
+                nums[i++] = num; // Fill the array with the counted numbers
+            }
+        }
+    }
+
+    public int majorityElement(int[] nums) {
+        HashMap<Integer, Integer> countMap = new HashMap<>();
+        int majorityCount = nums.length / 2;
+        for (int num : nums) {
+            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
+            if (countMap.get(num) > majorityCount) {
+                return num; // Return the majority element if found
+            }
+        }
+        return -1; // If no majority element is found
+    }
+
+    public List<Integer> majorityElementTwo(int[] nums) {
+        Set<Integer> ans = new HashSet<>();
+        HashMap<Integer, Integer> countMap = new HashMap<>();
+        int threshold = nums.length / 3;
+        for(int num : nums){
+            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
+            if(countMap.get(num) > threshold){
+                ans.add(num);
+            }
+        }
+        return new ArrayList<>(ans);
+    }
+
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+
+        int i = m - 1; // Pointer for the end of nums1
+        int j = n - 1; // Pointer for the end of nums2
+        int k = m + n - 1; // Pointer for the end of merged array
+
+        while (i >= 0 && j >= 0) {
+            if (nums1[i] > nums2[j]) {
+                nums1[k--] = nums1[i--]; // Place larger element at the end
+            } else {
+                nums1[k--] = nums2[j--]; // Place larger element at the end
+            }
+        }
+
+        while (j >= 0) {
+            nums1[k--] = nums2[j--]; // If any elements left in nums2, copy them
+        }
     }
 }
