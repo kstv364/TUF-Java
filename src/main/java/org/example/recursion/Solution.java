@@ -87,8 +87,6 @@ public class Solution {
     }
 
     private int checkutilWithAns(int[] nums, int i, int cursum, int k) {
-
-
         if (cursum == k) {
            return 1;
         }

@@ -1,5 +1,5 @@
 package org.example.sorting;
-import java.util.Arrays;
+import java.util.*;
 
 public class SelectionSort {
 
@@ -98,5 +98,26 @@ public class SelectionSort {
             j--;
         }
     }
+
+    public int[] intersectionArray(int[] nums1, int[] nums2) {
+        int i = 0, j = 0;
+        List<Integer> intersection = new ArrayList<>();
+        while (i < nums1.length && j < nums2.length) {
+            if (nums1[i] < nums2[j]) {
+                i++;
+            } else if (nums1[i] > nums2[j]) {
+                j++;
+            } else {
+                int current = nums1[i];
+                intersection.add(current);
+                while (i < nums1.length && nums1[i] == current && j < nums2.length && nums2[j] == current) {
+                    i++; j++;
+                }
+            }
+        }
+
+        return  intersection.stream().mapToInt(Integer::intValue).toArray();
+    }
+
 }
 
