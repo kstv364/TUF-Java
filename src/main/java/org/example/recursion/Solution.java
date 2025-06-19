@@ -1,7 +1,7 @@
 package org.example.recursion;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.print.attribute.EnumSyntax;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Solution {
@@ -97,4 +97,118 @@ public class Solution {
         return answers;
     }
 
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        //your code goes here
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> current = new ArrayList<>();
+        combinationSumUtil(candidates, target, 0, current, ans);
+        return ans;
+    }
+
+    private void combinationSumUtil(int[] candidates, int target, int i, List<Integer> current, List<List<Integer>> ans) {
+        if(i>=candidates.length){
+            if(target==0){
+                ans.add(new ArrayList<>(current));
+            }
+            return;
+        }
+        if(target <0 ){
+            return;
+        }
+        current.add(candidates[i]);
+        combinationSumUtil(candidates, target - candidates[i], i, current, ans);
+        current.remove(current.size() - 1);
+        combinationSumUtil(candidates, target, i+1, current, ans);
+    }
+
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        //your code goes here
+        Set<List<Integer>> ans = new HashSet<>();
+        List<Integer> current = new ArrayList<>();
+        combinationSumUtil2(candidates, target, 0, current, ans);
+        return new ArrayList<>(ans);
+    }
+
+    private void combinationSumUtil2(int[] candidates, int target, int i, List<Integer> current, Set<List<Integer>> ans) {
+        if(i>=candidates.length){
+            if(target==0){
+                List<Integer> copy = new ArrayList<>(current);
+                Collections.sort(copy);
+                ans.add(copy);
+            }
+            return;
+        }
+        if(target <0 ){
+            return;
+        }
+        current.add(candidates[i]);
+        combinationSumUtil2(candidates, target - candidates[i], i+1, current, ans);
+        current.remove(current.size() - 1);
+        combinationSumUtil2(candidates, target, i+1, current, ans);
+    }
+
+    public List<Integer> subsetSums(int[] nums) {
+        //yor code goes here
+        List<Integer> ans = new ArrayList<>();
+        recur(nums, 0, 0, ans);
+        return ans;
+    }
+
+    private void recur(int[] nums, int i, int curSum, List<Integer> ans) {
+       if(i>=nums.length){
+           ans.add(curSum);
+           return;
+       }
+       recur(nums, i+1,curSum + nums[i], ans);
+       recur(nums, i+1, curSum, ans);
+    }
+
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        //your code goes here
+        HashSet<List<Integer>> ans = new HashSet<>();
+        Arrays.sort(nums);
+        List<Integer> current = new ArrayList<>();
+        recurrence(nums, 0,current, ans);
+        return new ArrayList<>(ans);
+    }
+
+    private void recurrence(int[] nums, int i, List<Integer> current, HashSet<List<Integer>> ans) {
+        if(i>=nums.length){
+            ans.add(new ArrayList<>(current));
+            return;
+        }
+        current.add(nums[i]);
+        recurrence(nums, i+1, current, ans);
+        current.remove(current.size() -1);
+        recurrence(nums, i+1, current, ans);
+    }
+
+
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        //your code goes here
+        int[] numbers = new int[]{1, 2, 3, 4, 5,6,7,8,9};
+        List<Integer> current = new ArrayList<>();
+        List<List<Integer>> ans = new ArrayList<>();
+        combinationUtil(numbers, 0, k, n, 0,  current, ans );
+        return ans;
+    }
+
+    private void combinationUtil(int[] numbers, int i, int k, int n, int curSum, List<Integer> current, List<List<Integer>> ans) {
+        // ✅ Prune early
+        if (curSum > n || current.size() > k) return;
+
+        // ✅ Found valid combination
+        if (current.size() == k) {
+            if (curSum == n) {
+                ans.add(new ArrayList<>(current));
+            }
+            return;
+        }
+
+        for (int j = i; j < numbers.length; j++) {
+            current.add(numbers[j]);
+            combinationUtil(numbers, j + 1, k, n, curSum + numbers[j], current, ans);
+            current.remove(current.size() - 1);
+        }
+    }
 }
