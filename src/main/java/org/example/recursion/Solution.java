@@ -211,4 +211,39 @@ public class Solution {
             current.remove(current.size() - 1);
         }
     }
+
+    public List<List<String>> partition(String s) {
+        //your code goes here
+        List<List<String>> ans = new ArrayList<>();
+        List<String> current = new ArrayList<>();
+        partrecur(s, 0 ,current, ans);
+        return ans;
+    }
+
+    private void partrecur(String s, int currentIndex, List<String> current, List<List<String>> ans) {
+
+        if(currentIndex == s.length()) {
+            ans.add(new ArrayList<>(current));
+            return;
+        }
+        for(int i=currentIndex; i<s.length();i++){
+            String sub = s.substring(currentIndex, i+1);
+            if(isPalin(sub)){
+                current.add(sub);
+                partrecur(s, i, current, ans);
+                current.remove(current.size() - 1);
+            }
+        }
+    }
+
+    private boolean isPalin(String sub) {
+        int i=0, j = sub.length()-1;
+        while(i<=j){
+            if(sub.charAt(i) != sub.charAt(j)){
+                return false;
+            }
+            i++; j--;
+        }
+        return true;
+    }
 }
