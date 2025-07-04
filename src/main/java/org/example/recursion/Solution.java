@@ -246,4 +246,27 @@ public class Solution {
         }
         return true;
     }
+
+    private Map<Integer, Integer> memo = new HashMap<>();
+    // decode no of ways for i to n
+    public int decode(String s, int i) {
+        if(s.length() == i) return 1;
+        // no of ways i + 1 to n
+        // no of ways i + 2 to n if i..i+2 is valid i.e. < 26
+        // string starting with 0 is invalid
+        if(s.charAt(i) == '0') return decode(s, i+1);
+        if(memo.containsKey(i)) return memo.get(i);
+        int count = decode(s, i+1);
+
+        if(i+1<s.length() && Integer.parseInt(s.substring(i,i+2)) < 26){
+            count += decode(s, i+2);
+        }
+        memo.put(i, count);
+        return count;
+    }
+
+    public int numDecodings(String s) {
+        memo.clear(); // Clear memoization map for fresh computation
+        return decode(s, 0);
+    }
 }
