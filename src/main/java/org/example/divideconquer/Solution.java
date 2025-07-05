@@ -130,4 +130,32 @@ package org.example.divideconquer;
             }
             return -1;
         }
+
+//        You’re given an integer array A of length n. A subsequence is any sequence you get by deleting zero or more elements (without reordering). We want to count how many subsequences of A satisfy both of these parity‑run constraints:
+//
+//        No three evens in a row: You never pick three consecutive elements in your subsequence that are all even numbers.
+//
+//        No three odds in a row: You never pick three consecutive elements in your subsequence that are all odd numbers.
+//
+//        Compute the total number of non‑empty valid subsequences.
+        public int countSubsequences(int[] nums) {
+            int n = nums.length;
+            long[][] dp = new long[n + 1][2];
+            dp[0][0] = 1; // Base case: empty subsequence
+
+            // dp[i][0] = number of valid subsequences ending with an even number
+            // dp[i][1] = number of valid subsequences ending with an odd number
+
+            for (int i = 1; i <= n; i++) {
+                if (nums[i - 1] % 2 == 0) { // Even number
+                    dp[i][0] = (dp[i - 1][0] + dp[i - 1][1]) % 1000000007; // No three evens in a row
+                    dp[i][1] = dp[i - 1][0]; // No three odds in a row
+                } else { // Odd number
+                    dp[i][0] = dp[i - 1][1]; // No three evens in a row
+                    dp[i][1] = (dp[i - 1][0] + dp[i - 1][1]) % 1000000007; // No three odds in a row
+                }
+            }
+
+            return (int) ((dp[n][0] + dp[n][1] - 1 + 1000000007) % 1000000007); // Subtracting 1 to exclude the empty subsequence
+        }
     }
