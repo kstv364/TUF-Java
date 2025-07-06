@@ -1,6 +1,8 @@
 package org.example.divideconquer;
 
-    class Solution {
+import java.util.HashMap;
+
+class Solution {
 
         public long mergeSort(int[] nums, int left, int right) {
             int cnt = 0;
@@ -158,4 +160,69 @@ package org.example.divideconquer;
 
             return (int) ((dp[n][0] + dp[n][1] - 1 + 1000000007) % 1000000007); // Subtracting 1 to exclude the empty subsequence
         }
+
+        public int climbStairs(int n) {
+            if (n <= 2) {
+                return n;
+            }
+            int[] dp = new int[n + 1];
+            dp[1] = 1;
+            dp[2] = 2;
+
+            for (int i = 3; i <= n; i++) {
+                dp[i] = dp[i - 1] + dp[i - 2];
+            }
+            return dp[n];
+        }
+
+        private HashMap<Integer, Integer> memo = new HashMap<>();
+        private int jumpTo(int [] heights, int pos){
+            if(pos == 0) return 0;
+            if(memo.containsKey(pos)) return memo.get(pos);
+            int left = jumpTo(heights, pos - 1) + Math.abs(heights[pos] - heights[pos - 1]);
+            int right = Integer.MAX_VALUE;
+            if(pos-2>=0)
+                right = jumpTo(heights, pos - 2) + Math.abs(heights[pos] - heights[pos - 2]);
+            memo.put(pos, Math.min(left, right));
+            return Math.min(left, right);
+        }
+        public int frogJump1(int[] heights) {
+            memo.clear();
+            return jumpTo(heights, heights.length - 1);
+        }
+
+    public int frogJump(int[] heights) {
+        int n = heights.length;
+        int[] dp = new int[n];
+        dp[0] = 0; // Starting point
+        for (int i = 1; i < n; i++) {
+            int oneStep = dp[i - 1] + Math.abs(heights[i] - heights[i - 1]);
+            int twoSteps = Integer.MAX_VALUE;
+            if(i-2 >= 0){
+                twoSteps = dp[i - 2] + Math.abs(heights[i] - heights[i - 2]);
+            }
+            dp[i] = Math.min(oneStep, twoSteps);
+        }
+        return dp[n - 1];
+    }
+
+    private int JumpK(int[] heights, int pos, int k) {
+        if (pos == 0) return 0;
+        if(memo.containsKey(pos)) return memo.get(pos);
+        int minCost = Integer.MAX_VALUE;
+        for (int j = 1; j <= k; j++) {
+            int cost = Integer.MAX_VALUE;
+            if(pos - j >= 0){
+                cost = JumpK(heights, pos - j, k) + Math.abs(heights[pos] - heights[pos - j]);
+            }
+            minCost = Math.min(minCost, cost);
+        }
+        memo.put(pos, minCost);
+        return minCost;
+    }
+    public int frogJump(int[] heights, int k) {
+            memo.clear();
+            return JumpK(heights, heights.length - 1, k);
+    }
+
     }
