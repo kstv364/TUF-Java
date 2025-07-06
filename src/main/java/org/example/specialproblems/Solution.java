@@ -40,4 +40,33 @@ public class Solution {
         return !(interval[1] < newInterval[0] || newInterval[1] < interval[0]);
     }
 
+
+    public static int findMajority(int[] arr, int n) {
+        // Write your code here.
+        int count = 0;
+        int candidate = -1;
+        // Choose a candidate and increment count if the candidate matches the current element, otherwise decrement count
+        for (int i = 0; i < n; i++) {
+            if (count == 0) {
+                candidate = arr[i];
+                count = 1;
+            } else if (arr[i] == candidate) {
+                count++;
+            } else {
+                count--;
+            }
+        }
+        // at the end if the there exists a majority element, it will be candidate
+        count = 0;
+        for (int i = 0; i < n; i++) {
+            if (arr[i] == candidate) {
+                count++;
+            }
+        }
+        if (count > n / 2) {
+            return candidate;
+        } else {
+            return -1; // No majority element found
+        }
+    }
 }
