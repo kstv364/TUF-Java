@@ -1,5 +1,7 @@
 package randomproblems;
 
+import java.util.HashMap;
+
 public class Solution {
 
     public static int uniquePaths(int m, int n) {
@@ -16,4 +18,6 @@ public class Solution {
         }
         return dp[m - 1][n - 1]; // Return the number of unique paths to the bottom-right corner
     }
+
+    
 }
